@@ -16,7 +16,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.pos.AppInitializer;
+import lk.ijse.pos.dao.ItemDAOImpl;
 import lk.ijse.pos.db.DBConnection;
+import lk.ijse.pos.model.Item;
 import lk.ijse.pos.view.tblmodel.ItemTM;
 
 
@@ -37,7 +39,7 @@ import java.util.logging.Logger;
  **/
 
 
-public class ManageItemFormController implements Initializable{
+public class ManageItemFormController implements Initializable {
 
     @FXML
     private JFXTextField txtItemCode;
@@ -54,31 +56,21 @@ public class ManageItemFormController implements Initializable{
 
     private boolean addNew = true;
 
-    private void loadAllItems(){
+    private void loadAllItems() {
 
         try {
-            Connection connection = DBConnection.getInstance().getConnection();
+            //load all items
+            ItemDAOImpl itemDAO = new ItemDAOImpl();
+            ArrayList<Item> allItems = itemDAO.getAllItems();
+            ArrayList<ItemTM> allItemsForTable = new ArrayList<>();
 
-            Statement stm = connection.createStatement();
-
-            ResultSet rst = stm.executeQuery("SELECT * FROM Item");
-
-            ArrayList<ItemTM> alItems = new ArrayList<>();
-
-            while (rst.next()){
-
-                ItemTM item = new ItemTM(rst.getString(1),
-                        rst.getString(2),
-                        rst.getBigDecimal(3),
-                        rst.getInt(4));
-
-                alItems.add(item);
-
+            for (Item item : allItems
+            ) {
+                allItemsForTable.add(new ItemTM(item.getCode(), item.getDescription(),
+                        item.getUnitPrice(), item.getQtyOnHand()));
             }
-
-            ObservableList<ItemTM> olItems = FXCollections.observableArrayList(alItems);
-
-            tblItems.setItems(olItems);
+            ObservableList<ItemTM> oblist = FXCollections.observableArrayList(allItemsForTable);
+            tblItems.setItems(oblist);
 
         } catch (Exception ex) {
             Logger.getLogger(ManageItemFormController.class.getName()).log(Level.SEVERE, null, ex);
@@ -105,7 +97,7 @@ public class ManageItemFormController implements Initializable{
             @Override
             public void changed(ObservableValue<? extends ItemTM> observable, ItemTM oldValue, ItemTM newValue) {
 
-                if (newValue == null){
+                if (newValue == null) {
                     addNew = true;
                     clearTextFields();
                     return;
@@ -122,7 +114,7 @@ public class ManageItemFormController implements Initializable{
         });
     }
 
-    private void clearTextFields(){
+    private void clearTextFields() {
         txtItemCode.setText("");
         txtDescription.setText("");
         txtUnitPrice.setText("");
@@ -146,24 +138,17 @@ public class ManageItemFormController implements Initializable{
     @FXML
     private void btnSave_OnAction(ActionEvent event) {
 
-        if (addNew){
+        if (addNew) {
 
             try {
 
-                Connection connection = DBConnection.getInstance().getConnection();
-
-                PreparedStatement pstm = connection.prepareStatement("INSERT INTO Item VALUES (?,?,?,?)");
-
-                pstm.setObject(1, txtItemCode.getText());
-                pstm.setObject(2, txtDescription.getText());
-                pstm.setObject(3, new BigDecimal(txtUnitPrice.getText()));
-                pstm.setObject(4, Integer.parseInt(txtQty.getText()));
-
-                int affectedRows = pstm.executeUpdate();
-
-                if (affectedRows > 0){
+                //save Item
+                ItemDAOImpl itemDAO = new ItemDAOImpl();
+                Item item = new Item(txtItemCode.getText(),txtDescription.getText(),new BigDecimal(txtUnitPrice.getText()),Integer.parseInt(txtQty.getText()));
+                boolean isSaved = itemDAO.saveItem(item);
+                if (isSaved) {
                     loadAllItems();
-                }else{
+                } else {
                     new Alert(Alert.AlertType.ERROR, "Failed to add the item", ButtonType.OK).show();
                 }
             } catch (Exception ex) {
@@ -171,23 +156,16 @@ public class ManageItemFormController implements Initializable{
             }
 
 
-        }else{
+        } else {
 
             try {
-                Connection connection = DBConnection.getInstance().getConnection();
-
-                PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?");
-
-                pstm.setObject(1, txtDescription.getText());
-                pstm.setObject(2, new BigDecimal(txtUnitPrice.getText()));
-                pstm.setObject(3, Integer.parseInt(txtQty.getText()));
-                pstm.setObject(4, txtItemCode.getText());
-
-                int affectedRows = pstm.executeUpdate();
-
-                if (affectedRows > 0){
+                //update item
+                ItemDAOImpl itemDAO = new ItemDAOImpl();
+                Item item = new Item(txtItemCode.getText(),txtDescription.getText(),new BigDecimal(txtUnitPrice.getText()),Integer.parseInt(txtQty.getText()));
+                boolean isUpdated = itemDAO.updateItem(item);
+                if (isUpdated) {
                     loadAllItems();
-                }else{
+                } else {
                     new Alert(Alert.AlertType.ERROR, "Failed to update the item", ButtonType.OK).show();
                 }
             } catch (Exception ex) {
@@ -208,18 +186,14 @@ public class ManageItemFormController implements Initializable{
         String code = tblItems.getSelectionModel().getSelectedItem().getCode();
 
         try {
-            Connection connection = DBConnection.getInstance().getConnection();
+            //delete item
+            ItemDAOImpl itemDAO = new ItemDAOImpl();
+            boolean isDeleted = itemDAO.deleteItem(code);
 
-            PreparedStatement pstm = connection.prepareStatement("DELETE FROM Item WHERE code=?");
-
-            pstm.setObject(1, code);
-
-            int affectedRows = pstm.executeUpdate();
-
-            if (affectedRows > 0){
+            if (isDeleted) {
                 loadAllItems();
-            }else{
-                new Alert(Alert.AlertType.ERROR,"Unable to delete the customer", ButtonType.OK).show();
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Unable to delete the customer", ButtonType.OK).show();
             }
         } catch (Exception ex) {
             Logger.getLogger(ManageItemFormController.class.getName()).log(Level.SEVERE, null, ex);

@@ -63,14 +63,13 @@ public class ManageCustomerFormController implements Initializable {
             for (Customer customer : allCustomers) {
                 allCustomersForTable.add(new CustomerTM(customer.getcID(), customer.getName(), customer.getAddress()));
             }
-            ObservableList<CustomerTM> olCustomers = FXCollections.observableArrayList(allCustomersForTable);
-            tblCustomers.setItems(olCustomers);
+            ObservableList<CustomerTM> obList = FXCollections.observableArrayList(allCustomersForTable);
+            tblCustomers.setItems(obList);
 
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -124,9 +123,9 @@ public class ManageCustomerFormController implements Initializable {
             try {
                 /*Delete operation*/
                 CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-                boolean b = customerDAO.deleteCustomer(customerID);
+                boolean idDelete = customerDAO.deleteCustomer(customerID);
 
-                if (b) {
+                if (idDelete) {
                     loadAllCustomers();
                 } else {
                     Alert a = new Alert(Alert.AlertType.ERROR, "Failed to delete the customer", ButtonType.OK);
@@ -135,9 +134,7 @@ public class ManageCustomerFormController implements Initializable {
             } catch (Exception ex) {
                 Logger.getLogger(ManageCustomerFormController.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
-
     }
 
     private void clearTextFields() {
@@ -161,8 +158,8 @@ public class ManageCustomerFormController implements Initializable {
             try {
                 /* Add Operation*/
                 CustomerDAOImpl dao = new CustomerDAOImpl();
-                boolean b = dao.saveCustomer(new Customer(txtCustomerId.getText(), txtCustomerName.getText(), txtCustomerAddress.getText()));
-                if (b) {
+                boolean isSaved = dao.saveCustomer(new Customer(txtCustomerId.getText(), txtCustomerName.getText(), txtCustomerAddress.getText()));
+                if (isSaved) {
                     loadAllCustomers();
                 } else {
                     new Alert(Alert.AlertType.ERROR, "Unable to add new customer", ButtonType.OK).show();
@@ -175,19 +172,16 @@ public class ManageCustomerFormController implements Initializable {
             try {
                 //Update Operation
                 CustomerDAOImpl dao = new CustomerDAOImpl();
-                boolean b = dao.updateCustomer(new Customer(txtCustomerId.getText(), txtCustomerName.getText(), txtCustomerAddress.getText()));
-                if (b) {
+                boolean isUpdated = dao.updateCustomer(new Customer(txtCustomerId.getText(), txtCustomerName.getText(), txtCustomerAddress.getText()));
+                if (isUpdated) {
                     loadAllCustomers();
                 } else {
                     new Alert(Alert.AlertType.ERROR, "Unable to update the customer", ButtonType.OK).show();
                 }
 
-
             } catch (Exception ex) {
                 Logger.getLogger(ManageCustomerFormController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
     }
-
 }

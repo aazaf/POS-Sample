@@ -73,6 +73,5 @@ public class CustomerDAOImpl {
             allCustomers.add(customer);
         }
         return allCustomers;
-
     }
 }
