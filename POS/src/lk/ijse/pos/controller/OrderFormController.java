@@ -117,7 +117,7 @@ public class OrderFormController implements Initializable {
                 }
 
                 try {
-                    PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Customer WHERE id=?");
+                    PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Customer WHERE cid=?");
                     pstm.setObject(1, customerID);
                     ResultSet rst = pstm.executeQuery();
 
