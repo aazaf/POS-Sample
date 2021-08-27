@@ -64,10 +64,13 @@ public class ManageItemFormController implements Initializable {
             ArrayList<Item> allItems = itemDAO.getAllItems();
             ArrayList<ItemTM> allItemsForTable = new ArrayList<>();
 
-            for (Item item : allItems
-            ) {
-                allItemsForTable.add(new ItemTM(item.getCode(), item.getDescription(),
-                        item.getUnitPrice(), item.getQtyOnHand()));
+            for (Item item : allItems) {
+                allItemsForTable.add(
+                        new ItemTM(
+                                item.getCode(),
+                                item.getDescription(),
+                                item.getUnitPrice(),
+                                item.getQtyOnHand()));
             }
             ObservableList<ItemTM> oblist = FXCollections.observableArrayList(allItemsForTable);
             tblItems.setItems(oblist);
@@ -75,7 +78,6 @@ public class ManageItemFormController implements Initializable {
         } catch (Exception ex) {
             Logger.getLogger(ManageItemFormController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
 
@@ -144,7 +146,7 @@ public class ManageItemFormController implements Initializable {
 
                 //save Item
                 ItemDAOImpl itemDAO = new ItemDAOImpl();
-                Item item = new Item(txtItemCode.getText(),txtDescription.getText(),new BigDecimal(txtUnitPrice.getText()),Integer.parseInt(txtQty.getText()));
+                Item item = new Item(txtItemCode.getText(), txtDescription.getText(), new BigDecimal(txtUnitPrice.getText()), Integer.parseInt(txtQty.getText()));
                 boolean isSaved = itemDAO.saveItem(item);
                 if (isSaved) {
                     loadAllItems();
@@ -161,7 +163,7 @@ public class ManageItemFormController implements Initializable {
             try {
                 //update item
                 ItemDAOImpl itemDAO = new ItemDAOImpl();
-                Item item = new Item(txtItemCode.getText(),txtDescription.getText(),new BigDecimal(txtUnitPrice.getText()),Integer.parseInt(txtQty.getText()));
+                Item item = new Item(txtItemCode.getText(), txtDescription.getText(), new BigDecimal(txtUnitPrice.getText()), Integer.parseInt(txtQty.getText()));
                 boolean isUpdated = itemDAO.updateItem(item);
                 if (isUpdated) {
                     loadAllItems();
@@ -171,11 +173,7 @@ public class ManageItemFormController implements Initializable {
             } catch (Exception ex) {
                 Logger.getLogger(ManageItemFormController.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-
         }
-
-
     }
 
     @FXML
@@ -199,5 +197,4 @@ public class ManageItemFormController implements Initializable {
             Logger.getLogger(ManageItemFormController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }

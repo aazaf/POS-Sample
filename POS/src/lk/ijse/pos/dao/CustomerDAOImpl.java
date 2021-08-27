@@ -21,7 +21,6 @@ public class CustomerDAOImpl {
         pstm.setObject(3, customer.getAddress());
         pstm.setObject(4, 0);
         return (pstm.executeUpdate()) > 0;
-
     }
 
     public boolean updateCustomer(Customer customer) throws Exception {
