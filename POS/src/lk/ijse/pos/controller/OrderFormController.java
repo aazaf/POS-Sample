@@ -22,13 +22,18 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import lk.ijse.pos.dao.CustomerDAOImpl;
 import lk.ijse.pos.dao.ItemDAOImpl;
+import lk.ijse.pos.dao.OrderDAOImpl;
+import lk.ijse.pos.dao.OrderDetailsDAOImpl;
 import lk.ijse.pos.db.DBConnection;
 import lk.ijse.pos.model.Customer;
 import lk.ijse.pos.model.Item;
+import lk.ijse.pos.model.OrderDetails;
+import lk.ijse.pos.model.Orders;
 import lk.ijse.pos.view.tblmodel.OrderDetailTM;
 
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
 import java.text.ParseException;
@@ -224,9 +229,7 @@ public class OrderFormController implements Initializable {
     private void loadAllData() throws Exception {
 
         CustomerDAOImpl dao = new CustomerDAOImpl();
-
         ArrayList<Customer> allCustomers = dao.getAllCustomers();
-
         cmbCustomerID.getItems().removeAll(cmbCustomerID.getItems());
 
         for (Customer customer : allCustomers) {
@@ -236,8 +239,8 @@ public class OrderFormController implements Initializable {
 
         ItemDAOImpl itemDAO = new ItemDAOImpl();
         ArrayList<Item> allItems = itemDAO.getAllItems();
-
         cmbItemCode.getItems().removeAll(cmbItemCode.getItems());
+
         for (Item item : allItems) {
             String itemCode = item.getCode();
             cmbItemCode.getItems().add(itemCode);
@@ -306,30 +309,30 @@ public class OrderFormController implements Initializable {
     @FXML
     private void btnPlaceOrderOnAction(ActionEvent event) {
         try {
+            /*add order*/
             connection.setAutoCommit(false);
-            String sql = "INSERT INTO Orders VALUES (?,?,?)";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setObject(1, txtOrderID.getText());
-            pstm.setObject(2, parseDate(txtOrderDate.getEditor().getText()));
-            pstm.setObject(3, cmbCustomerID.getSelectionModel().getSelectedItem());
-            int affectedRows = pstm.executeUpdate();
+            OrderDAOImpl orderDAO = new OrderDAOImpl();
+            Orders orders = new Orders(txtOrderID.getText(),parseDate(txtOrderDate.getEditor().getText()),cmbCustomerID.getSelectionModel().getSelectedItem());
+            boolean isPlaced = orderDAO.placeOrder(orders);
 
-            if (affectedRows == 0) {
+            if (!isPlaced) {
                 connection.rollback();
                 return;
             }
 
-            pstm = connection.prepareStatement("INSERT INTO OrderDetails VALUES (?,?,?,?)");
-
+            /*add order details to the table*/
+            OrderDetailsDAOImpl orderDetailsDAO = new OrderDetailsDAOImpl();
 
             for (OrderDetailTM orderDetail : olOrderDetails) {
-                pstm.setObject(1, txtOrderID.getText());
-                pstm.setObject(2, orderDetail.getItemCode());
-                pstm.setObject(3, orderDetail.getQty());
-                pstm.setObject(4, orderDetail.getUnitPrice());
-                affectedRows = pstm.executeUpdate();
+                OrderDetails orderDetails = new OrderDetails(
+                        txtOrderID.getText(),
+                        orderDetail.getItemCode(),
+                        orderDetail.getQty(),
+                        new BigDecimal(orderDetail.getUnitPrice()));
 
-                if (affectedRows == 0) {
+                boolean isAdded = orderDetailsDAO.addOrderDetail(orderDetails);
+
+                if (!isAdded) {
                     connection.rollback();
                     return;
                 }
@@ -349,6 +352,7 @@ public class OrderFormController implements Initializable {
                     return;
                 }
             }
+
             connection.commit();
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Order Placed", ButtonType.OK);
             alert.show();

@@ -57,15 +57,14 @@ public class ItemDAOImpl {
     public Item searchItem(String code) throws Exception {
 
         Connection connection = DBConnection.getInstance().getConnection();
-        Statement stm = connection.createStatement();
-        ResultSet rst = stm.executeQuery("SELECT * FROM Item where code=?");
-        if (rst.next()){
-            return new Item(
-                    rst.getString("code"),
-                    rst.getString("description"),
-                    rst.getBigDecimal("unitPrice"),
-                    rst.getInt("qtyOnHand")
-            );
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM Item where code=?");
+        stm.setObject(1, code);
+        ResultSet rst = stm.executeQuery();
+        if (rst.next()) {
+            return new Item(rst.getString(1),
+                    rst.getString(2),
+                    rst.getBigDecimal(3),
+                    rst.getInt(4));
         }
         return null;
     }

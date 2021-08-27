@@ -9,8 +9,9 @@ import java.util.ArrayList;
 public class OrderDetailsDAOImpl {
 
     public boolean addOrderDetail(OrderDetails orderDetails) throws Exception {
+
         Connection connection = DBConnection.getInstance().getConnection();
-        PreparedStatement pstm = connection.prepareStatement("INSERT INTO OrderDetails VALUES (?,?,?,?)");
+        PreparedStatement pstm = connection.prepareStatement("INSERT INTO OrderDetail VALUES (?,?,?,?)");
         pstm.setObject(1, orderDetails.getOrderId());
         pstm.setObject(2, orderDetails.getItemCode());
         pstm.setObject(3, orderDetails.getQty());
@@ -20,18 +21,18 @@ public class OrderDetailsDAOImpl {
     }
 
     public boolean updateOrderDetail(OrderDetails orderDetails){
-
+        throw new UnsupportedOperationException("not support");
     }
 
     public boolean deleteOrderDetail(String id){
-
+        throw new UnsupportedOperationException("not support");
     }
 
     public OrderDetails searchOrderDetails(String id){
-
+        throw new UnsupportedOperationException("not support");
     }
 
     public ArrayList<OrderDetails> getAllOrderDetails(){
-
+        throw new UnsupportedOperationException("not support");
     }
 }
