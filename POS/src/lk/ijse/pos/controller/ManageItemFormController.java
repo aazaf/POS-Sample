@@ -16,7 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.pos.AppInitializer;
-import lk.ijse.pos.dao.ItemDAO;
+import lk.ijse.pos.dao.custom.ItemDAO;
 import lk.ijse.pos.dao.impl.ItemDAOImpl;
 import lk.ijse.pos.model.Item;
 import lk.ijse.pos.view.tblmodel.ItemTM;
@@ -58,7 +58,7 @@ public class ManageItemFormController implements Initializable {
 
         try {
             //load all items
-            ArrayList<Item> allItems = itemDAO.getAllItems();
+            ArrayList<Item> allItems = itemDAO.getAll();
             ArrayList<ItemTM> allItemsForTable = new ArrayList<>();
 
             for (Item item : allItems) {
@@ -143,7 +143,7 @@ public class ManageItemFormController implements Initializable {
 
                 //save Item
                 Item item = new Item(txtItemCode.getText(), txtDescription.getText(), new BigDecimal(txtUnitPrice.getText()), Integer.parseInt(txtQty.getText()));
-                boolean isSaved = itemDAO.saveItem(item);
+                boolean isSaved = itemDAO.add(item);
                 if (isSaved) {
                     loadAllItems();
                 } else {
@@ -159,7 +159,7 @@ public class ManageItemFormController implements Initializable {
             try {
                 //update item
                 Item item = new Item(txtItemCode.getText(), txtDescription.getText(), new BigDecimal(txtUnitPrice.getText()), Integer.parseInt(txtQty.getText()));
-                boolean isUpdated = itemDAO.updateItem(item);
+                boolean isUpdated = itemDAO.update(item);
                 if (isUpdated) {
                     loadAllItems();
                 } else {
@@ -180,7 +180,7 @@ public class ManageItemFormController implements Initializable {
 
         try {
             //delete item
-            boolean isDeleted = itemDAO.deleteItem(code);
+            boolean isDeleted = itemDAO.delete(code);
 
             if (isDeleted) {
                 loadAllItems();

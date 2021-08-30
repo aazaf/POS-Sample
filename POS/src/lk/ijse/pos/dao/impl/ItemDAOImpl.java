@@ -1,7 +1,7 @@
 package lk.ijse.pos.dao.impl;
 
 import lk.ijse.pos.dao.CrudUtils;
-import lk.ijse.pos.dao.ItemDAO;
+import lk.ijse.pos.dao.custom.ItemDAO;
 import lk.ijse.pos.model.Item;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -9,27 +9,23 @@ import java.util.ArrayList;
 public class ItemDAOImpl implements ItemDAO {
 
     @Override
-    public boolean saveItem(Item item) throws Exception {
+    public boolean add(Item item) throws Exception {
         return CrudUtils.executeUpdate("INSERT INTO Item VALUES (?,?,?,?)", item.getCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand());
     }
 
     @Override
-    public boolean updateItem(Item item) throws Exception {
+    public boolean delete(String s) throws Exception {
+        return CrudUtils.executeUpdate("DELETE FROM Item WHERE code=?", s);
+    }
+
+    @Override
+    public boolean update(Item item) throws Exception {
         return CrudUtils.executeUpdate("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?", item.getDescription(), item.getUnitPrice(), item.getQtyOnHand(), item.getCode());
     }
 
-    public boolean updateItemQtyOnHand(String code, int qtyOnHand) throws Exception {
-        return CrudUtils.executeUpdate("UPDATE Item SET qtyOnHand=? WHERE code=?", code, qtyOnHand);
-    }
-
     @Override
-    public boolean deleteItem(String code) throws Exception {
-        return CrudUtils.executeUpdate("DELETE FROM Item WHERE code=?",code);
-    }
-
-    @Override
-    public Item searchItem(String code) throws Exception {
-        ResultSet rst = CrudUtils.executeQuery("SELECT * FROM Item where code=?", code);
+    public Item search(String s) throws Exception {
+        ResultSet rst = CrudUtils.executeQuery("SELECT * FROM Item where code=?", s);
         if (rst.next()) {
             return new Item(rst.getString(1),
                     rst.getString(2),
@@ -40,7 +36,7 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public ArrayList<Item> getAllItems() throws Exception {
+    public ArrayList<Item> getAll() throws Exception {
         ResultSet rst = CrudUtils.executeQuery("SELECT * FROM Item");
         ArrayList<Item> alItems = new ArrayList<>();
 
@@ -55,4 +51,10 @@ public class ItemDAOImpl implements ItemDAO {
         }
         return alItems;
     }
+
+    @Override
+    public boolean updateItemQtyOnHand(String code, int qtyOnHand) throws Exception {
+        return CrudUtils.executeUpdate("UPDATE Item SET qtyOnHand=? WHERE code=?", qtyOnHand, code);
+    }
 }
+

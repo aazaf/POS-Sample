@@ -1,29 +1,33 @@
 package lk.ijse.pos.dao.impl;
 
 import lk.ijse.pos.dao.CrudUtils;
-import lk.ijse.pos.dao.OrderDetailDAO;
+import lk.ijse.pos.dao.custom.OrderDetailDAO;
 import lk.ijse.pos.model.OrderDetails;
 import java.util.ArrayList;
 
 public class OrderDetailsDAOImpl implements OrderDetailDAO {
-
-    public boolean addOrderDetail(OrderDetails orderDetails) throws Exception {
-        return CrudUtils.executeUpdate("NSERT INTO OrderDetail VALUES (?,?,?,?)",orderDetails.getOrderId(),orderDetails.getItemCode(),orderDetails.getQty(),orderDetails.getUnitPrice());
+    @Override
+    public boolean add(OrderDetails orderDetails) throws Exception {
+        return CrudUtils.executeUpdate("INSERT INTO OrderDetail VALUES (?,?,?,?)", orderDetails.getOrderId(), orderDetails.getItemCode(), orderDetails.getQty(), orderDetails.getUnitPrice());
     }
 
-    public boolean updateOrderDetail(OrderDetails orderDetails){
+    @Override
+    public boolean delete(String s) throws Exception {
         throw new UnsupportedOperationException("not support");
     }
 
-    public boolean deleteOrderDetail(String id){
+    @Override
+    public boolean update(OrderDetails orderDetails) throws Exception {
         throw new UnsupportedOperationException("not support");
     }
 
-    public OrderDetails searchOrderDetails(String id){
+    @Override
+    public OrderDetails search(String s) throws Exception {
         throw new UnsupportedOperationException("not support");
     }
 
-    public ArrayList<OrderDetails> getAllOrderDetails(){
+    @Override
+    public ArrayList<OrderDetails> getAll() throws Exception {
         throw new UnsupportedOperationException("not support");
     }
 }

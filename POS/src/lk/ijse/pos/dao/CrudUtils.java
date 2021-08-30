@@ -23,5 +23,5 @@ public class CrudUtils {
     public static ResultSet executeQuery(String sql, Object... params) throws Exception {
         return getPreparedStatement(sql, params).executeQuery();
     }
-
 }
+

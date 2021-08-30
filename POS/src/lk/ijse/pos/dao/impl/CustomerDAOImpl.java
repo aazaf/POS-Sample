@@ -1,31 +1,30 @@
 package lk.ijse.pos.dao.impl;
 
 import lk.ijse.pos.dao.CrudUtils;
-import lk.ijse.pos.dao.CustomerDAO;
+import lk.ijse.pos.dao.custom.CustomerDAO;
 import lk.ijse.pos.model.Customer;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class CustomerDAOImpl implements CustomerDAO {
-
     @Override
-    public boolean saveCustomer(Customer customer) throws Exception {
-        return CrudUtils.executeUpdate("INSERT INTO Customer VALUES (?,?,?,?",customer.getcID(),customer.getName(),customer.getAddress(),0);
+    public boolean add(Customer customer) throws Exception {
+        return CrudUtils.executeUpdate("INSERT INTO Customer VALUES (?,?,?,?", customer.getcID(), customer.getName(), customer.getAddress(), 0);
     }
 
     @Override
-    public boolean updateCustomer(Customer customer) throws Exception {
-       return CrudUtils.executeUpdate("UPDATE Customer SET name=?, address=? WHERE cid=?", customer.getName(), customer.getAddress(), customer.getcID());
+    public boolean delete(String s) throws Exception {
+        return CrudUtils.executeUpdate("DELETE FROM Customer WHERE cid=?", s);
     }
 
     @Override
-    public boolean deleteCustomer(String id) throws Exception {
-        return CrudUtils.executeUpdate("DELETE FROM Customer WHERE cid=?",id);
+    public boolean update(Customer customer) throws Exception {
+        return CrudUtils.executeUpdate("UPDATE Customer SET name=?, address=? WHERE cid=?", customer.getName(), customer.getAddress(), customer.getcID());
     }
 
     @Override
-    public Customer searchCustomer(String id) throws Exception {
-        ResultSet rst = CrudUtils.executeQuery("SELECT * FROM Customer where cid=?", id);
+    public Customer search(String s) throws Exception {
+        ResultSet rst = CrudUtils.executeQuery("SELECT * FROM Customer where cid=?", s);
         if (rst.next()) {
             return new Customer(
                     rst.getString("cid"),
@@ -36,7 +35,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public ArrayList<Customer> getAllCustomers() throws Exception {
+    public ArrayList<Customer> getAll() throws Exception {
         ResultSet rst = CrudUtils.executeQuery("SELECT * FROM Customer");
         ArrayList<Customer> allCustomers = new ArrayList<>();
         while (rst.next()) {
