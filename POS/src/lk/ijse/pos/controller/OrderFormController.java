@@ -93,8 +93,7 @@ public class OrderFormController implements Initializable {
 
     private Connection connection;
 
-    public OrderFormController() throws Exception {
-    }
+    public OrderFormController() throws Exception {}
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -137,7 +136,6 @@ public class OrderFormController implements Initializable {
                 }
 
                 try {
-                    CustomerDAO customerDAO = new CustomerDAOImpl();
                     Customer customer = customerDAO.searchCustomer(customerID);
                     if (customer != null) {
                         txtCustomerName.setText(customer.getName());
@@ -167,7 +165,6 @@ public class OrderFormController implements Initializable {
                 }
 
                 try {
-//                    ItemDAO itemDAO = new ItemDAOImpl();
                     Item item = itemDAO.searchItem(itemCode);
                     if (item != null) {
                         String description = item.getDescription();
@@ -240,7 +237,6 @@ public class OrderFormController implements Initializable {
 
     private void loadAllData() throws Exception {
 
-//        CustomerDAO dao = new CustomerDAOImpl();
         ArrayList<Customer> allCustomers = customerDAO.getAllCustomers();
         cmbCustomerID.getItems().removeAll(cmbCustomerID.getItems());
 
@@ -249,7 +245,6 @@ public class OrderFormController implements Initializable {
             cmbCustomerID.getItems().add(id);
         }
 
-//        ItemDAO itemDAO = new ItemDAOImpl();
         ArrayList<Item> allItems = itemDAO.getAllItems();
         cmbItemCode.getItems().removeAll(cmbItemCode.getItems());
 
@@ -323,7 +318,6 @@ public class OrderFormController implements Initializable {
         try {
             /*add order*/
             connection.setAutoCommit(false);
-//            OrderDAOImpl orderDAO = new OrderDAOImpl();
             Orders orders = new Orders(txtOrderID.getText(),parseDate(txtOrderDate.getEditor().getText()),cmbCustomerID.getSelectionModel().getSelectedItem());
             boolean isPlaced = orderDAO.placeOrder(orders);
 
@@ -333,8 +327,6 @@ public class OrderFormController implements Initializable {
             }
 
             /*add order details to the table*/
-//            OrderDetailDAO orderDetailsDAO = new OrderDetailsDAOImpl();
-
             for (OrderDetailTM orderDetail : olOrderDetails) {
                 OrderDetails orderDetails = new OrderDetails(
                         txtOrderID.getText(),
@@ -350,13 +342,11 @@ public class OrderFormController implements Initializable {
                 }
                 int qtyOnHand = 0;
 
-//                ItemDAO itemDAO = new ItemDAOImpl();
                 Item item = itemDAO.searchItem(orderDetail.getItemCode());
 
                 if (item!=null) {
                     qtyOnHand = item.getQtyOnHand();
                 }
-//                ItemDAO itemDAO1 = new ItemDAOImpl();
                 boolean b = itemDAO.updateItemQtyOnHand(orderDetail.getItemCode(), orderDetail.getQty());
 
                 if (!b) {

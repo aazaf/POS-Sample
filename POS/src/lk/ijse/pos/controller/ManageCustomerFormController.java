@@ -56,7 +56,6 @@ public class ManageCustomerFormController implements Initializable {
 
         try {
             /*  get all customers*/
-//            CustomerDAO customerDAO = new CustomerDAOImpl();
             ArrayList<Customer> allCustomers = customerDAO.getAllCustomers();
             ArrayList<CustomerTM> allCustomersForTable = new ArrayList<>();
 
@@ -122,7 +121,6 @@ public class ManageCustomerFormController implements Initializable {
 
             try {
                 /*Delete operation*/
-//                CustomerDAO customerDAO = new CustomerDAOImpl();
                 boolean idDelete = customerDAO.deleteCustomer(customerID);
 
                 if (idDelete) {
@@ -157,7 +155,6 @@ public class ManageCustomerFormController implements Initializable {
         if (addnew) {
             try {
                 /* Add Operation*/
-//                CustomerDAO dao = new CustomerDAOImpl();
                 boolean isSaved = customerDAO.saveCustomer(new Customer(txtCustomerId.getText(), txtCustomerName.getText(), txtCustomerAddress.getText()));
                 if (isSaved) {
                     loadAllCustomers();
@@ -171,7 +168,6 @@ public class ManageCustomerFormController implements Initializable {
         } else {
             try {
                 //Update Operation
-//                CustomerDAO dao = new CustomerDAOImpl();
                 boolean isUpdated = customerDAO.updateCustomer(new Customer(txtCustomerId.getText(), txtCustomerName.getText(), txtCustomerAddress.getText()));
                 if (isUpdated) {
                     loadAllCustomers();

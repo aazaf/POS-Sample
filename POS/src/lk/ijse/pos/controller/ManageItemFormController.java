@@ -62,7 +62,6 @@ public class ManageItemFormController implements Initializable {
 
         try {
             //load all items
-//            ItemDAOImpl itemDAO = new ItemDAOImpl();
             ArrayList<Item> allItems = itemDAO.getAllItems();
             ArrayList<ItemTM> allItemsForTable = new ArrayList<>();
 
@@ -147,7 +146,6 @@ public class ManageItemFormController implements Initializable {
             try {
 
                 //save Item
-//                ItemDAO itemDAO = new ItemDAOImpl();
                 Item item = new Item(txtItemCode.getText(), txtDescription.getText(), new BigDecimal(txtUnitPrice.getText()), Integer.parseInt(txtQty.getText()));
                 boolean isSaved = itemDAO.saveItem(item);
                 if (isSaved) {
@@ -164,7 +162,6 @@ public class ManageItemFormController implements Initializable {
 
             try {
                 //update item
-//                ItemDAO itemDAO = new ItemDAOImpl();
                 Item item = new Item(txtItemCode.getText(), txtDescription.getText(), new BigDecimal(txtUnitPrice.getText()), Integer.parseInt(txtQty.getText()));
                 boolean isUpdated = itemDAO.updateItem(item);
                 if (isUpdated) {
@@ -187,7 +184,6 @@ public class ManageItemFormController implements Initializable {
 
         try {
             //delete item
-//            ItemDAO itemDAO = new ItemDAOImpl();
             boolean isDeleted = itemDAO.deleteItem(code);
 
             if (isDeleted) {
