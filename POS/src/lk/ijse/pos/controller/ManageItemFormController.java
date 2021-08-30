@@ -39,7 +39,6 @@ public class ManageItemFormController implements Initializable {
 
     ItemDAO itemDAO = new ItemDAOImpl();
 
-
     @FXML
     private JFXTextField txtItemCode;
     @FXML
@@ -54,9 +53,6 @@ public class ManageItemFormController implements Initializable {
     private TableView<ItemTM> tblItems;
 
     private boolean addNew = true;
-
-    public ManageItemFormController() throws Exception {
-    }
 
     private void loadAllItems() {
 

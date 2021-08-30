@@ -93,8 +93,6 @@ public class OrderFormController implements Initializable {
 
     private Connection connection;
 
-    public OrderFormController() throws Exception {}
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 

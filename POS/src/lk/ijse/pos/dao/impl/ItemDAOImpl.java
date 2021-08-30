@@ -11,13 +11,9 @@ import java.util.ArrayList;
 
 public class ItemDAOImpl implements ItemDAO {
 
-    Connection connection = DBConnection.getInstance().getConnection();
-
-    public ItemDAOImpl() throws Exception {}
-
     @Override
     public boolean saveItem(Item item) throws Exception {
-//        Connection connection = DBConnection.getInstance().getConnection();
+        Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement("INSERT INTO Item VALUES (?,?,?,?)");
 
         pstm.setObject(1, item.getCode());
@@ -32,7 +28,7 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public boolean updateItem(Item item) throws Exception {
 
-//        Connection connection = DBConnection.getInstance().getConnection();
+        Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?");
 
         pstm.setObject(1, item.getDescription());
@@ -45,7 +41,7 @@ public class ItemDAOImpl implements ItemDAO {
 
     public boolean updateItemQtyOnHand(String code,int qtyOnHand) throws Exception {
 
-//        Connection connection = DBConnection.getInstance().getConnection();
+        Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET qtyOnHand=? WHERE code=?");
         pstm.setObject(1, qtyOnHand);
         pstm.setObject(2, code);
@@ -55,7 +51,7 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public boolean deleteItem(String code) throws Exception {
 
-//        Connection connection = DBConnection.getInstance().getConnection();
+        Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement("DELETE FROM Item WHERE code=?");
 
         pstm.setObject(1, code);
@@ -66,7 +62,7 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public Item searchItem(String code) throws Exception {
 
-//        Connection connection = DBConnection.getInstance().getConnection();
+        Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM Item where code=?");
         stm.setObject(1, code);
         ResultSet rst = stm.executeQuery();
@@ -82,7 +78,7 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public ArrayList<Item> getAllItems() throws Exception {
 
-//        Connection connection = DBConnection.getInstance().getConnection();
+        Connection connection = DBConnection.getInstance().getConnection();
         Statement stm = connection.createStatement();
         ResultSet rst = stm.executeQuery("SELECT * FROM Item");
 

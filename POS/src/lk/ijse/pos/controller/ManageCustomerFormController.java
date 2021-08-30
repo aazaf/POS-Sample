@@ -50,8 +50,6 @@ public class ManageCustomerFormController implements Initializable {
     @FXML
     private TableView<CustomerTM> tblCustomers;
 
-    public ManageCustomerFormController() throws Exception {}
-
     private void loadAllCustomers() {
 
         try {

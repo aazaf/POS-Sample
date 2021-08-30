@@ -9,13 +9,9 @@ import java.util.ArrayList;
 
 public class OrderDetailsDAOImpl implements OrderDetailDAO {
 
-    Connection connection = DBConnection.getInstance().getConnection();
-
-    public OrderDetailsDAOImpl() throws Exception {}
-
     public boolean addOrderDetail(OrderDetails orderDetails) throws Exception {
 
-//        Connection connection = DBConnection.getInstance().getConnection();
+        Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement("INSERT INTO OrderDetail VALUES (?,?,?,?)");
         pstm.setObject(1, orderDetails.getOrderId());
         pstm.setObject(2, orderDetails.getItemCode());
