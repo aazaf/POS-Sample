@@ -20,10 +20,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import lk.ijse.pos.dao.CustomerDAOImpl;
-import lk.ijse.pos.dao.ItemDAOImpl;
-import lk.ijse.pos.dao.OrderDAOImpl;
-import lk.ijse.pos.dao.OrderDetailsDAOImpl;
+import lk.ijse.pos.dao.CustomerDAO;
+import lk.ijse.pos.dao.ItemDAO;
+import lk.ijse.pos.dao.OrderDAO;
+import lk.ijse.pos.dao.OrderDetailDAO;
+import lk.ijse.pos.dao.impl.CustomerDAOImpl;
+import lk.ijse.pos.dao.impl.ItemDAOImpl;
+import lk.ijse.pos.dao.impl.OrderDAOImpl;
+import lk.ijse.pos.dao.impl.OrderDetailsDAOImpl;
 import lk.ijse.pos.db.DBConnection;
 import lk.ijse.pos.model.Customer;
 import lk.ijse.pos.model.Item;
@@ -52,6 +56,11 @@ import java.util.logging.Logger;
  **/
 
 public class OrderFormController implements Initializable {
+
+    ItemDAO itemDAO = new ItemDAOImpl();
+    CustomerDAO customerDAO = new CustomerDAOImpl();
+    OrderDAO orderDAO = new OrderDAOImpl();
+    OrderDetailDAO orderDetailDAO = new OrderDetailsDAOImpl();
 
     @FXML
     private JFXComboBox<String> cmbCustomerID;
@@ -83,6 +92,9 @@ public class OrderFormController implements Initializable {
     private JFXDatePicker txtOrderDate;
 
     private Connection connection;
+
+    public OrderFormController() throws Exception {
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -125,7 +137,7 @@ public class OrderFormController implements Initializable {
                 }
 
                 try {
-                    CustomerDAOImpl customerDAO = new CustomerDAOImpl();
+                    CustomerDAO customerDAO = new CustomerDAOImpl();
                     Customer customer = customerDAO.searchCustomer(customerID);
                     if (customer != null) {
                         txtCustomerName.setText(customer.getName());
@@ -155,7 +167,7 @@ public class OrderFormController implements Initializable {
                 }
 
                 try {
-                    ItemDAOImpl itemDAO = new ItemDAOImpl();
+//                    ItemDAO itemDAO = new ItemDAOImpl();
                     Item item = itemDAO.searchItem(itemCode);
                     if (item != null) {
                         String description = item.getDescription();
@@ -228,8 +240,8 @@ public class OrderFormController implements Initializable {
 
     private void loadAllData() throws Exception {
 
-        CustomerDAOImpl dao = new CustomerDAOImpl();
-        ArrayList<Customer> allCustomers = dao.getAllCustomers();
+//        CustomerDAO dao = new CustomerDAOImpl();
+        ArrayList<Customer> allCustomers = customerDAO.getAllCustomers();
         cmbCustomerID.getItems().removeAll(cmbCustomerID.getItems());
 
         for (Customer customer : allCustomers) {
@@ -237,7 +249,7 @@ public class OrderFormController implements Initializable {
             cmbCustomerID.getItems().add(id);
         }
 
-        ItemDAOImpl itemDAO = new ItemDAOImpl();
+//        ItemDAO itemDAO = new ItemDAOImpl();
         ArrayList<Item> allItems = itemDAO.getAllItems();
         cmbItemCode.getItems().removeAll(cmbItemCode.getItems());
 
@@ -311,7 +323,7 @@ public class OrderFormController implements Initializable {
         try {
             /*add order*/
             connection.setAutoCommit(false);
-            OrderDAOImpl orderDAO = new OrderDAOImpl();
+//            OrderDAOImpl orderDAO = new OrderDAOImpl();
             Orders orders = new Orders(txtOrderID.getText(),parseDate(txtOrderDate.getEditor().getText()),cmbCustomerID.getSelectionModel().getSelectedItem());
             boolean isPlaced = orderDAO.placeOrder(orders);
 
@@ -321,7 +333,7 @@ public class OrderFormController implements Initializable {
             }
 
             /*add order details to the table*/
-            OrderDetailsDAOImpl orderDetailsDAO = new OrderDetailsDAOImpl();
+//            OrderDetailDAO orderDetailsDAO = new OrderDetailsDAOImpl();
 
             for (OrderDetailTM orderDetail : olOrderDetails) {
                 OrderDetails orderDetails = new OrderDetails(
@@ -330,7 +342,7 @@ public class OrderFormController implements Initializable {
                         orderDetail.getQty(),
                         new BigDecimal(orderDetail.getUnitPrice()));
 
-                boolean isAdded = orderDetailsDAO.addOrderDetail(orderDetails);
+                boolean isAdded = orderDetailDAO.addOrderDetail(orderDetails);
 
                 if (!isAdded) {
                     connection.rollback();
@@ -338,14 +350,14 @@ public class OrderFormController implements Initializable {
                 }
                 int qtyOnHand = 0;
 
-                ItemDAOImpl itemDAO = new ItemDAOImpl();
+//                ItemDAO itemDAO = new ItemDAOImpl();
                 Item item = itemDAO.searchItem(orderDetail.getItemCode());
 
                 if (item!=null) {
                     qtyOnHand = item.getQtyOnHand();
                 }
-                ItemDAOImpl itemDAO1 = new ItemDAOImpl();
-                boolean b = itemDAO1.updateItemQtyOnHand(orderDetail.getItemCode(), orderDetail.getQty());
+//                ItemDAO itemDAO1 = new ItemDAOImpl();
+                boolean b = itemDAO.updateItemQtyOnHand(orderDetail.getItemCode(), orderDetail.getQty());
 
                 if (!b) {
                     connection.rollback();

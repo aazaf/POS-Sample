@@ -1,16 +1,21 @@
-package lk.ijse.pos.dao;
+package lk.ijse.pos.dao.impl;
 
+import lk.ijse.pos.dao.OrderDetailDAO;
 import lk.ijse.pos.db.DBConnection;
 import lk.ijse.pos.model.OrderDetails;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
-public class OrderDetailsDAOImpl {
+public class OrderDetailsDAOImpl implements OrderDetailDAO {
+
+    Connection connection = DBConnection.getInstance().getConnection();
+
+    public OrderDetailsDAOImpl() throws Exception {}
 
     public boolean addOrderDetail(OrderDetails orderDetails) throws Exception {
 
-        Connection connection = DBConnection.getInstance().getConnection();
+//        Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement("INSERT INTO OrderDetail VALUES (?,?,?,?)");
         pstm.setObject(1, orderDetails.getOrderId());
         pstm.setObject(2, orderDetails.getItemCode());

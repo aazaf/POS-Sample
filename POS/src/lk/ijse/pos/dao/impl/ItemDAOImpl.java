@@ -1,5 +1,6 @@
-package lk.ijse.pos.dao;
+package lk.ijse.pos.dao.impl;
 
+import lk.ijse.pos.dao.ItemDAO;
 import lk.ijse.pos.db.DBConnection;
 import lk.ijse.pos.model.Item;
 import java.sql.Connection;
@@ -8,9 +9,15 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class ItemDAOImpl {
+public class ItemDAOImpl implements ItemDAO {
+
+    Connection connection = DBConnection.getInstance().getConnection();
+
+    public ItemDAOImpl() throws Exception {}
+
+    @Override
     public boolean saveItem(Item item) throws Exception {
-        Connection connection = DBConnection.getInstance().getConnection();
+//        Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement("INSERT INTO Item VALUES (?,?,?,?)");
 
         pstm.setObject(1, item.getCode());
@@ -22,9 +29,10 @@ public class ItemDAOImpl {
 
     }
 
+    @Override
     public boolean updateItem(Item item) throws Exception {
 
-        Connection connection = DBConnection.getInstance().getConnection();
+//        Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?");
 
         pstm.setObject(1, item.getDescription());
@@ -37,16 +45,17 @@ public class ItemDAOImpl {
 
     public boolean updateItemQtyOnHand(String code,int qtyOnHand) throws Exception {
 
-        Connection connection = DBConnection.getInstance().getConnection();
+//        Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET qtyOnHand=? WHERE code=?");
         pstm.setObject(1, qtyOnHand);
         pstm.setObject(2, code);
         return (pstm.executeUpdate() > 0);
     }
 
+    @Override
     public boolean deleteItem(String code) throws Exception {
 
-        Connection connection = DBConnection.getInstance().getConnection();
+//        Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement("DELETE FROM Item WHERE code=?");
 
         pstm.setObject(1, code);
@@ -54,9 +63,10 @@ public class ItemDAOImpl {
         return (pstm.executeUpdate()) > 0;
     }
 
+    @Override
     public Item searchItem(String code) throws Exception {
 
-        Connection connection = DBConnection.getInstance().getConnection();
+//        Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM Item where code=?");
         stm.setObject(1, code);
         ResultSet rst = stm.executeQuery();
@@ -69,9 +79,10 @@ public class ItemDAOImpl {
         return null;
     }
 
+    @Override
     public ArrayList<Item> getAllItems() throws Exception {
 
-        Connection connection = DBConnection.getInstance().getConnection();
+//        Connection connection = DBConnection.getInstance().getConnection();
         Statement stm = connection.createStatement();
         ResultSet rst = stm.executeQuery("SELECT * FROM Item");
 

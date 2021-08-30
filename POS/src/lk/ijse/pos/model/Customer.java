@@ -12,7 +12,7 @@ package lk.ijse.pos.model;
  **/
 
 public class Customer {
-    private String  cID;
+    private String cID;
     private String name;
     private String address;
 
