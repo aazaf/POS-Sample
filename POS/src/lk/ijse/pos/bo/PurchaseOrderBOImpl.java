@@ -1,11 +1,8 @@
 package lk.ijse.pos.bo;
 
-import lk.ijse.pos.controller.OrderFormController;
-import lk.ijse.pos.dao.custom.CustomerDAO;
 import lk.ijse.pos.dao.custom.ItemDAO;
 import lk.ijse.pos.dao.custom.OrderDAO;
 import lk.ijse.pos.dao.custom.OrderDetailDAO;
-import lk.ijse.pos.dao.impl.CustomerDAOImpl;
 import lk.ijse.pos.dao.impl.ItemDAOImpl;
 import lk.ijse.pos.dao.impl.OrderDAOImpl;
 import lk.ijse.pos.dao.impl.OrderDetailsDAOImpl;
@@ -16,15 +13,14 @@ import lk.ijse.pos.model.Orders;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class PurchaseOrderBOImpl {
+public class PurchaseOrderBOImpl implements PurchaseOrderBO {
 
     ItemDAO itemDAO = new ItemDAOImpl();
     OrderDAO orderDAO = new OrderDAOImpl();
     OrderDetailDAO orderDetailDAO = new OrderDetailsDAOImpl();
 
+    @Override
     public boolean purchaseOrder(Orders orders, ArrayList<OrderDetails> orderDetails) throws Exception {
 
         Connection connection = null;
@@ -62,24 +58,23 @@ public class PurchaseOrderBOImpl {
             }
 
             connection.commit();
+            return true;
 
         } catch (SQLException ex) {
             try {
                 connection.rollback();
             } catch (SQLException ex1) {
-                Logger.getLogger(OrderFormController.class.getName()).log(Level.SEVERE, null, ex1);
+                throw new Exception(ex1);
             }
-            Logger.getLogger(OrderFormController.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception(ex);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new Exception(e);
         } finally {
             try {
                 connection.setAutoCommit(true);
-                return true;
             } catch (SQLException ex) {
-                Logger.getLogger(OrderFormController.class.getName()).log(Level.SEVERE, null, ex);
+                throw new Exception(ex);
             }
-            return true;
         }
     }
 }
