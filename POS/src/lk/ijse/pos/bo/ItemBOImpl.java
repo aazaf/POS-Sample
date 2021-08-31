@@ -1,13 +1,13 @@
 package lk.ijse.pos.bo;
 
+import lk.ijse.pos.dao.DAOFactory;
 import lk.ijse.pos.dao.custom.ItemDAO;
-import lk.ijse.pos.dao.impl.ItemDAOImpl;
 import lk.ijse.pos.model.Item;
 import java.util.ArrayList;
 
 public class ItemBOImpl implements ItemBO{
 
-    ItemDAO itemDAO = new ItemDAOImpl();
+    ItemDAO itemDAO = (ItemDAO) DAOFactory.getDaoFactory().getDao(DAOFactory.DAOTypes.ITEM);
 
     @Override
     public boolean addItem(Item item) throws Exception {
