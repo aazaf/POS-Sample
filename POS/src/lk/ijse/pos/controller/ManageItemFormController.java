@@ -17,10 +17,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.pos.AppInitializer;
 import lk.ijse.pos.bo.BOFactory;
-import lk.ijse.pos.bo.ItemBOImpl;
-import lk.ijse.pos.dao.custom.ItemDAO;
-import lk.ijse.pos.dao.impl.ItemDAOImpl;
-import lk.ijse.pos.model.Item;
+import lk.ijse.pos.bo.custom.impl.ItemBOImpl;
+import lk.ijse.pos.dto.ItemDTO;
+import lk.ijse.pos.entity.Item;
 import lk.ijse.pos.view.tblmodel.ItemTM;
 
 
@@ -60,10 +59,10 @@ public class ManageItemFormController implements Initializable {
 
         try {
             //load all items
-            ArrayList<Item> allItems = itemBO.getAllItems();
+            ArrayList<ItemDTO> allItems = itemBO.getAllItems();
             ArrayList<ItemTM> allItemsForTable = new ArrayList<>();
 
-            for (Item item : allItems) {
+            for (ItemDTO item : allItems) {
                 allItemsForTable.add(
                         new ItemTM(
                                 item.getCode(),
@@ -144,7 +143,7 @@ public class ManageItemFormController implements Initializable {
             try {
 
                 //save Item
-                Item item = new Item(txtItemCode.getText(), txtDescription.getText(), new BigDecimal(txtUnitPrice.getText()), Integer.parseInt(txtQty.getText()));
+                ItemDTO item = new ItemDTO(txtItemCode.getText(), txtDescription.getText(), new BigDecimal(txtUnitPrice.getText()), Integer.parseInt(txtQty.getText()));
                 boolean isSaved = itemBO.addItem(item);
                 if (isSaved) {
                     loadAllItems();
@@ -160,7 +159,7 @@ public class ManageItemFormController implements Initializable {
 
             try {
                 //update item
-                Item item = new Item(txtItemCode.getText(), txtDescription.getText(), new BigDecimal(txtUnitPrice.getText()), Integer.parseInt(txtQty.getText()));
+                ItemDTO item = new ItemDTO(txtItemCode.getText(), txtDescription.getText(), new BigDecimal(txtUnitPrice.getText()), Integer.parseInt(txtQty.getText()));
                 boolean isUpdated = itemBO.updateItem(item);
                 if (isUpdated) {
                     loadAllItems();

@@ -17,12 +17,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.pos.AppInitializer;
 import lk.ijse.pos.bo.BOFactory;
-import lk.ijse.pos.bo.CustomerBO;
-import lk.ijse.pos.bo.CustomerBOImpl;
-import lk.ijse.pos.bo.SuperBO;
-import lk.ijse.pos.dao.custom.CustomerDAO;
-import lk.ijse.pos.dao.impl.CustomerDAOImpl;
-import lk.ijse.pos.model.Customer;
+import lk.ijse.pos.bo.custom.CustomerBO;
+import lk.ijse.pos.dto.CustomerDTO;
+import lk.ijse.pos.entity.Customer;
 import lk.ijse.pos.view.tblmodel.CustomerTM;
 
 
@@ -58,11 +55,11 @@ public class ManageCustomerFormController implements Initializable {
 
         try {
             /*  get all customers*/
-            ArrayList<Customer> allCustomers = customerBO.getAllCustomers();
+            ArrayList<CustomerDTO> allCustomers = customerBO.getAllCustomers();
             ArrayList<CustomerTM> allCustomersForTable = new ArrayList<>();
 
-            for (Customer customer : allCustomers) {
-                allCustomersForTable.add(new CustomerTM(customer.getcID(), customer.getName(), customer.getAddress()));
+            for (CustomerDTO customer : allCustomers) {
+                allCustomersForTable.add(new CustomerTM(customer.getId(), customer.getName(), customer.getAddress()));
             }
             ObservableList<CustomerTM> obList = FXCollections.observableArrayList(allCustomersForTable);
             tblCustomers.setItems(obList);
@@ -157,7 +154,7 @@ public class ManageCustomerFormController implements Initializable {
         if (addnew) {
             try {
                 /* Add Operation*/
-                boolean isSaved = customerBO.addCustomer(new Customer(txtCustomerId.getText(), txtCustomerName.getText(), txtCustomerAddress.getText()));
+                boolean isSaved = customerBO.addCustomer(new CustomerDTO(txtCustomerId.getText(), txtCustomerName.getText(), txtCustomerAddress.getText()));
                 if (isSaved) {
                     loadAllCustomers();
                 } else {
@@ -170,7 +167,7 @@ public class ManageCustomerFormController implements Initializable {
         } else {
             try {
                 //Update Operation
-                boolean isUpdated = customerBO.updateCustomer(new Customer(txtCustomerId.getText(), txtCustomerName.getText(), txtCustomerAddress.getText()));
+                boolean isUpdated = customerBO.updateCustomer(new CustomerDTO(txtCustomerId.getText(), txtCustomerName.getText(), txtCustomerAddress.getText()));
                 if (isUpdated) {
                     loadAllCustomers();
                 } else {
