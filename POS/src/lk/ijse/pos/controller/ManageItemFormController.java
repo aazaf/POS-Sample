@@ -16,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.pos.AppInitializer;
+import lk.ijse.pos.bo.ItemBOImpl;
 import lk.ijse.pos.dao.custom.ItemDAO;
 import lk.ijse.pos.dao.impl.ItemDAOImpl;
 import lk.ijse.pos.model.Item;
@@ -37,8 +38,6 @@ import java.util.logging.Logger;
 
 public class ManageItemFormController implements Initializable {
 
-    ItemDAO itemDAO = new ItemDAOImpl();
-
     @FXML
     private JFXTextField txtItemCode;
     @FXML
@@ -54,11 +53,13 @@ public class ManageItemFormController implements Initializable {
 
     private boolean addNew = true;
 
+    ItemBOImpl itemBO = new ItemBOImpl();
+
     private void loadAllItems() {
 
         try {
             //load all items
-            ArrayList<Item> allItems = itemDAO.getAll();
+            ArrayList<Item> allItems = itemBO.getAllItems();
             ArrayList<ItemTM> allItemsForTable = new ArrayList<>();
 
             for (Item item : allItems) {
@@ -143,7 +144,7 @@ public class ManageItemFormController implements Initializable {
 
                 //save Item
                 Item item = new Item(txtItemCode.getText(), txtDescription.getText(), new BigDecimal(txtUnitPrice.getText()), Integer.parseInt(txtQty.getText()));
-                boolean isSaved = itemDAO.add(item);
+                boolean isSaved = itemBO.addItem(item);
                 if (isSaved) {
                     loadAllItems();
                 } else {
@@ -159,7 +160,7 @@ public class ManageItemFormController implements Initializable {
             try {
                 //update item
                 Item item = new Item(txtItemCode.getText(), txtDescription.getText(), new BigDecimal(txtUnitPrice.getText()), Integer.parseInt(txtQty.getText()));
-                boolean isUpdated = itemDAO.update(item);
+                boolean isUpdated = itemBO.updateItem(item);
                 if (isUpdated) {
                     loadAllItems();
                 } else {
@@ -180,7 +181,7 @@ public class ManageItemFormController implements Initializable {
 
         try {
             //delete item
-            boolean isDeleted = itemDAO.delete(code);
+            boolean isDeleted = itemBO.deleteItem(code);
 
             if (isDeleted) {
                 loadAllItems();

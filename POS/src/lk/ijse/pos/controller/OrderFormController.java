@@ -55,11 +55,6 @@ import java.util.logging.Logger;
 
 public class OrderFormController implements Initializable {
 
-    ItemDAO itemDAO = new ItemDAOImpl();
-    CustomerDAO customerDAO = new CustomerDAOImpl();
-    OrderDAO orderDAO = new OrderDAOImpl();
-    OrderDetailDAO orderDetailDAO = new OrderDetailsDAOImpl();
-
     @FXML
     private JFXComboBox<String> cmbCustomerID;
     @FXML
