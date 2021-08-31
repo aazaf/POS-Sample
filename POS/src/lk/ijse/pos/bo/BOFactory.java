@@ -1,7 +1,5 @@
 package lk.ijse.pos.bo;
 
-import lk.ijse.pos.dao.SuperDAO;
-
 public class BOFactory {
 
     private static BOFactory boFactory;
@@ -33,3 +31,6 @@ public class BOFactory {
         }
     }
 }
+
+
+
