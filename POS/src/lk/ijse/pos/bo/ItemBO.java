@@ -3,7 +3,7 @@ package lk.ijse.pos.bo;
 import lk.ijse.pos.model.Item;
 import java.util.ArrayList;
 
-public interface ItemBO {
+public interface ItemBO extends SuperBO {
 
     boolean addItem(Item item) throws Exception;
 

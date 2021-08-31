@@ -3,7 +3,7 @@ package lk.ijse.pos.bo;
 import lk.ijse.pos.model.Customer;
 import java.util.ArrayList;
 
-public interface CustomerBO {
+public interface CustomerBO extends SuperBO{
 
     boolean addCustomer(Customer customer) throws Exception;
 
