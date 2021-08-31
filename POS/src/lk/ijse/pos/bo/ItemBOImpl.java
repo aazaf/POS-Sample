@@ -28,4 +28,8 @@ public class ItemBOImpl {
     public ArrayList<Item> getAllItems() throws Exception {
         return itemDAO.getAll();
     }
+
+    public boolean updateItemQtyOnHand(String code, int qtyOnHand) throws Exception {
+        return itemDAO.updateItemQtyOnHand(code, qtyOnHand);
+    }
 }
